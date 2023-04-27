@@ -1,0 +1,70 @@
+﻿@model FormTable.Areas.Yonetim.ViewModels.YeniKullaniciViewModel
+@{
+    ViewBag.Title = "Liste";
+    Layout = "~/Areas/Yonetim/Views/Shared/_YonetimLayout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Kullanıcı Listesi</h5>
+                <div class="card-header-right">
+                    <div class="btn-group card-option">
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="feather icon-more-horizontal"></i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Adı Soyadı</th>
+                            <th scope="col">Kullanıcı Adı</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Resim</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    @{
+                    int i = 1;
+                    }
+                    @foreach (var item in Model.ListKullaniciBilgileri)
+                    {
+                   
+                    <tr>
+                        <th scope="row">@i</th>
+                        <td>@item.AdSoyad</td>
+                        <td>@item.KullaniciAdi</td>
+                        <td>@item.Email</td>
+                        <td>@item.Resim</td>
+                    </tr>
+                        i++;
+                    }
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section _Css
+{
+    <link rel="stylesheet" type="text/css" href="~/Areas/Yonetim/assets/css/jquery.fancybox.min.css" />
+}
+
+@section _JavaScriptDevexpress
+{
+    <script src="~/Areas/Yonetim/assets/js/DevexpressButonIslemleri.js"></script>
+    <script>
+        function GridButonIslemleri(s, e) {
+            DevexpressTablo(s, e, 'AdSoyad', 'Kullanıcısını', '/Yonetim/Kullanici/KullaniciSil/');
+        }
+    </script>
+}
+
+

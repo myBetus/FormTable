@@ -1,0 +1,239 @@
+﻿@using FormTable.Areas.Yonetim.Controllers
+@using FormTable.Areas.Yonetim.ViewModels
+@using FormTable.Models
+@{
+    var kullaniciresmi = "/image/no-image.png";
+    var kullanicibilgileri = new KullaniciBilgileriClass();
+    Guid kullaniciid;
+    if (!string.IsNullOrEmpty(User.Identity.Name) && Guid.TryParse(User.Identity.Name, out kullaniciid))
+    {
+        kullanicibilgileri = IndexController.KullaniciBilgileri(User.Identity.Name);
+        if (kullanicibilgileri == null)
+        {
+            var url = Request.RawUrl;
+            Response.Redirect("/Login?returnUrl=" + url);
+        }
+        else
+        {
+            kullaniciresmi = string.IsNullOrEmpty(kullanicibilgileri.Resim) ? "/image/no-image.jpg" : kullanicibilgileri.Resim;
+            Layout = null;
+        }
+    }
+    else
+    {
+        var url = Request.RawUrl;
+        if (!string.IsNullOrEmpty(url))
+        {
+            Response.Redirect("/Login?returnUrl=" + url);
+        }
+        else
+        {
+            Response.Redirect("/Login/Index");
+        }
+    }
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | </title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    @Styles.Render("~/Content/YonetimCss")
+    @RenderSection("_Css", false)
+
+    @RenderSection("_JavaScriptDevexpress", false)
+</head>
+<body class="background-grd-red" style="">
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <nav class="pcoded-navbar theme-horizontal menu-light brand-blue">
+        <div class="navbar-wrapper container">
+            <div class="navbar-content sidenav-horizontal" id="layout-sidenav">
+                <ul class="nav pcoded-inner-navbar sidenav-inner">
+                    <li class="nav-item pcoded-menu-caption">
+                        <label>Navigation</label>
+                    </li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item pcoded-hasmenu">
+                        @*<a href="/Yonetim/Index" class="nav-link "><span class="pcoded-micon"><i class="fas fa-home"></i></span><span class="pcoded-mtext">Anasayfa</span></a>*@
+
+                    </li>
+
+                    <li class="nav-item pcoded-hasmenu">
+                        <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="fas fa-user-edit"></i></span><span class="pcoded-mtext">Kullanıcı Tanımla</span></a>
+                        <ul class="pcoded-submenu">
+                            <li>@Html.ActionLink("Kullanıcı Tanımla", "Tanimla", "Kullanici")</li>
+                        </ul>
+                    </li>
+                  
+                    <li class="nav-item pcoded-hasmenu">
+                        <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="fas fa-camera-retro"></i></span><span class="pcoded-mtext">Kullanıcı Listesi</span></a>
+                        <ul class="pcoded-submenu">
+                            <li>@Html.ActionLink("Kullanıcı Listesi", "Liste", "Kullanici")</li>
+                        </ul>
+                    </li>
+
+               
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="navbar pcoded-header navbar-expand-lg header-blue navbar-light" >
+        <div class="m-header">
+            <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+            <a href="/" class="b-brand">
+                <class="logo" width="90%" style="height: 70px;" />
+            </a>
+            <a href="#!" class="mob-toggler">
+                <i class="feather icon-more-vertical"></i>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+            
+                <li>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="BtnMenuArama" title="Menüde Arama Yap."><i class="feather icon-search"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right notification">
+                            <div class="noti-head">
+                                <input type="text" class="form-control-sm btn-block" placeholder="Menüde arama yapabilirsiniz..." id="TxtMenuArama">
+                            </div>
+                            <ul class="noti-body" id="UlMenuArama"></ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown drp-user">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Kullanıcı İşlemleri">
+                            <i class="feather icon-user"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-notification">
+                            <div class="pro-head">
+                                <img src="@kullaniciresmi" class="img-radius" alt="@kullanicibilgileri.AdSoyad">
+                                <span>@kullanicibilgileri.AdSoyad</span>
+                                <a href="/Index/CikisYap" class="dud-logout" title="Çıkış Yap">
+                                    <i class="feather icon-log-out"></i>
+                                </a>
+                            </div>
+                            <ul class="pro-body">
+                                <li>
+                                    <a href="/Yonetim/Kullanici/YeniKullanici/@kullanicibilgileri.Id" class="dropdown-item">
+                                        <i class="feather icon-user"></i> Profil Bilgileri
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div class="pcoded-main-container">
+        <div class="pcoded-content">
+            <div class="page-wrapper">
+                <div class="page-header m-b-0">
+                    <div class="page-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="page-header-title">
+                                </div>
+                                <ul class="breadcrumb"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*@Html.AntiForgeryToken()*@
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalSession" aria-hidden="true" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Oturum Sona Erme Uyarısı</h4>
+                </div>
+                <div class="modal-body"> Oturumunuz <span id="seconds-timer"></span> saniye sonra sona erecek. Oturumunuzu uzatmak istermisiniz.</div>
+                <div class="modal-footer">
+                    <button id="BtnTamamSession" type="button" class="btn btn-default btn-success" style="padding: 6px 12px; margin-bottom: 0; font-size: 14px; font-weight: normal; border: 1px solid transparent; border-radius: 4px;">Devam Et</button>
+                    <button id="BtnCikisYapSession" type="button" class="btn btn-default btn-danger" style="padding: 6px 12px; margin-bottom: 0; font-size: 14px; font-weight: normal; border: 1px solid transparent; border-radius: 4px;">Çıkış Yap</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/Content/YonetimJs")
+    @RenderSection("_JavaScript", false)
+    <script>
+        $(window).on('load', function () {
+            @if (TempData["JavaScriptAlertYonetim"] != null)
+        {
+            @Html.Raw(TempData["JavaScriptAlertYonetim"])
+        }
+        });
+    </script>
+    <script src="/Areas/Yonetim/assets/js/pcoded.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(":input").inputmask();
+        @if (TempData["JavaScriptAlertYonetim"] != null)
+        {
+            @Html.Raw(TempData["JavaScriptAlertYonetim"])
+            @*@TempData.Remove("JavaScriptAlertYonetim")*@
+        }
+        (function () {
+            if ($('#layout-sidenav').hasClass('sidenav-horizontal') || window.layoutHelpers.isSmallScreen()) {
+                return;
+            }
+            try {
+                window.layoutHelpers._getSetting("Rtl");
+                window.layoutHelpers.setCollapsed(
+                    localStorage.getItem('layoutCollapsed') === 'true',
+                    false
+                );
+            } catch (e) {}
+        })();
+        $(function() {
+            $('#layout-sidenav').each(function() {
+                new SideNav(this, { orientation: $(this).hasClass('sidenav-horizontal') ? 'horizontal' : 'vertical' });
+            });
+            $('body').on('click', '.layout-sidenav-toggle', function(e) {
+                e.preventDefault();
+                window.layoutHelpers.toggleCollapsed();
+                if (!window.layoutHelpers.isSmallScreen()) {
+                    try {
+                        localStorage.setItem('layoutCollapsed', String(window.layoutHelpers.isCollapsed()));
+                    } catch (e) {}
+                }
+            });
+        });
+        $("#pcoded").pcodedmenu({
+            themelayout: 'horizontal',
+            MenuTrigger: 'hover',
+            SubMenuTrigger: 'hover'
+        });
+    });
+    </script>
+
+    <script>
+        function loadModal() {
+            window.PopupSayfaYuklemesi.Show();
+        }
+
+        function unloadModal() {
+            window.PopupSayfaYuklemesi.Hide();
+        }
+    </script>
+
+
+</body>
+</html>

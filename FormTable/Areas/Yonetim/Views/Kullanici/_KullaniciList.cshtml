@@ -1,0 +1,111 @@
+﻿
+
+@using System.Web.UI.WebControls
+@using System.Drawing
+@using DevExpress.Data
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridKullaniciListesi";
+        settings.Theme = "Material";
+        settings.CallbackRouteValues = new { Controller = "Kullanici", Action = "_KullaniciList" };
+        settings.KeyFieldName = "Id";
+        settings.Width = Unit.Percentage(100);
+
+
+
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        settings.Settings.ShowFooter = true;
+
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.ShowNumericButtons = true;
+        settings.SettingsPager.Summary.Visible = true;
+        settings.SettingsPager.ShowSeparators = true;
+        settings.SettingsPager.PageSizeItemSettings.Items = new[] { "10", "20", "30", "40", "50" };
+        settings.SettingsPager.PageSizeItemSettings.ShowAllItem = true;
+        settings.SettingsPager.PageSizeItemSettings.Position = PagerPageSizePosition.Left;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.Styles.AdaptiveDetailButtonWidth = 27;
+        settings.Styles.AlternatingRow.Enabled = DefaultBoolean.True;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+ 
+        settings.Columns.Add(m =>
+        {
+            m.ColumnType = MVCxGridViewColumnType.TextBox;
+            m.FieldName = "AdSoyad";
+            m.Caption = "Ad Soyad";
+            m.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            m.HeaderStyle.Font.Bold = true;
+            m.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+        settings.Columns.Add(m =>
+        {
+            m.ColumnType = MVCxGridViewColumnType.TextBox;
+            m.FieldName = "KullaniciAdi";
+            m.Caption = "Kullanıcı Adı";
+            m.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            m.HeaderStyle.Font.Bold = true;
+            m.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+        settings.Columns.Add(m =>
+        {
+            m.FieldName = "Resim";
+            m.Caption = "Resim";
+            m.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            m.HeaderStyle.Font.Bold = true;
+            m.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            m.Width = Unit.Percentage(1);
+            m.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            m.Settings.AllowSort = DefaultBoolean.False;
+            m.SetDataItemTemplateContent(itemContext =>
+            {
+                var resimyolu = string.IsNullOrEmpty(itemContext.Text) || itemContext.Text == "&nbsp;" ? "/Resim/no-image.jpg" : itemContext.Text;
+                ViewContext.Writer.Write("<a href=\"" + resimyolu + "\" class=\"btn-block\" data-fancybox data-caption=\"\" title=\"\"><img src=\"" + resimyolu + "\" alt=\"\" width=\"70\" height=\"35\" /></a>");
+            });
+        });
+  
+/*Silme ve Düzenleme Buton İşlemleri Başlangıç*/
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = Unit.Percentage(1);
+        settings.CommandColumn.VisibleIndex = 6;
+        settings.CommandColumn.Caption = " ";
+        settings.CommandColumn.ButtonType = GridCommandButtonRenderMode.Image;
+        var customButtonedit = new GridViewCommandColumnCustomButton() { ID = "BtnDuzenle", Text = "Düzenle" };
+        customButtonedit.Image.Url = "/image/Grid/edit-siyah.png";
+        settings.CommandColumn.CustomButtons.Add(customButtonedit);
+        var customButtonesil = new GridViewCommandColumnCustomButton() { ID = "BtnSil", Text = "Sil" };
+        customButtonesil.Image.Url = "/image/Grid/sil-siyah.png";
+        settings.CommandColumn.CustomButtons.Add(customButtonesil);
+        settings.ClientSideEvents.CustomButtonClick = "GridButonIslemleri";
+        settings.CustomActionRouteValues = new { Controller = "Kullanici", Action = "GridButonIslemleri" };
+/*Silme ve Düzenleme Buton İşlemleri Bitiş*/
+        settings.SettingsExport.EnableClientSideExportAPI = true;
+        settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+        settings.SettingsExport.FileName = "Kullanıcı Listesi - " + DateTime.Now.ToString("ddMMyyyy");
+        settings.SettingsExport.RenderBrick = (sender, e) =>
+        {
+            if (e.RowType == GridViewRowType.Data && e.VisibleIndex % 2 == 0)
+                e.BrickStyle.BackColor = Color.FromArgb(0xEE, 0xEE, 0xEE);
+        };
+    });
+
+}
+@grid.Bind(Model).GetHtml()
+
+
+
+

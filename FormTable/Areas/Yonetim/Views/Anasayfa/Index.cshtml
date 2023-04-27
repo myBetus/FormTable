@@ -1,0 +1,179 @@
+﻿@model FormTable.Areas.Yonetim.ViewModels.FormViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Yonetim/Views/Shared/_YonetimLayout.cshtml";
+    var btnAdi = Model.Form.Id == 0 ? "<i class=\"fas fa-save\"></i> Kaydet" : "<i class=\"fas fa-edit\"></i> Düzenle";
+
+}
+
+<h6 style="text-align:center"> FORM YÖNETİM SAYFASINA HOŞGELDİNİZ</h6>
+<br />
+<br />
+
+
+<div class="card-block">
+    @*<input type="text" id="search" placeholder="Arama yapmak için ad girin...">*@
+  
+    <div class="form-outline">
+        <input type="search" id="search" class="form-control" placeholder="Arama yapmak istediğiniz kişinin adını giriniz..." aria-label="Search" />
+    </div>
+    <table class="table table-hover" id="myTable">
+
+        <thead>
+
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Adı</th>
+                <th scope="col">Soyadı</th>
+                <th scope="col">Sınıf Düzeyi</th>
+                <th scope="col">Ders Adı</th>
+                <th scope="col">Konu</th>
+                <th scope="col">Mesaj</th>
+                <th scope="col">Resim</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var item in Model.ListForm)
+            {
+
+                <tr>
+                    <th scope="row">@i</th>
+                    <td>@item.Ad</td>
+                    <td>@item.SoyAd</td>
+                    <td>@item.SinifNo</td>
+                    <td>@item.DersAdi</td>
+                    <td>@item.Konu</td>
+                    <td>@item.Mesaj</td>
+                    <td>@item.Resim</td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+<button type="button" class="btn btn-primary" style="background-color: #ff5951" data-toggle="modal" data-target="#FormOlustur">Yeni Form Oluştur</button>
+
+<div class="modal fade" id="FormOlustur" tabindex="-1" role="dialog" aria-labelledby="FormBaslik" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="FormBaslik">Hemen Sorun!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="card-block">
+                    @using (Html.BeginForm("EkleDuzenle", "Anasayfa", FormMethod.Post, new { id = "FormTable", enctype = "multipart/form-data", @onsubmit = "ButonYukleniyor('BtnKaydet');" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                @Html.LabelFor(x => x.Form.Ad, "Adınız:", new { @class = "col-sm-4 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.Form.Ad, "Adınız:", new { @class = "form-control form-control-sm", required = true })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(x => x.Form.SoyAd, "Soy Adınız:", new { @class = "col-sm-4 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.Form.SoyAd, new { @class = "form-control form-control-sm", required = true })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.LabelFor(x => x.Form.SinifNoID, "Sınıf Seçiniz:", new { @class = "col-sm-4 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(x => x.Form.SinifNoID, new SelectList(Model.ListSinif, "Id", "SinifNo"), "Sınıfınız...", new { @id = "CmbSinif", @class = "CmbSelectIslemleri form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(x => x.Form.DersID, "Ders Adını Seçiniz:", new { @class = "col-sm-4 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(x => x.Form.DersID, new SelectList(Model.ListDers, "Id", "DersAdi"), "Dersiniz...", new { @id = "CmbDers", @class = "CmbSelectIslemleri form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(x => x.Form.Konu, "Konu Başlığı:", new { @class = "col-sm-4 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.Form.Konu, new { @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(x => x.Form.Mesaj, "Sorunuz:", new { @class = "col-sm-4 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextAreaFor(x => x.Form.Mesaj, new { @class = "form-control form-control-sm", @row = 3, @ValidateRequestMode = "Disabled", required = true })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(x => x.Form.Resim, "Sorunuzun Resimi:", new { @class = "col-sm-4 col-form-label" })
+                                <div class="col-sm-8">
+                                    @if (@Model.Form.Resim != null)
+                                    {
+                                        <a href="@Model.Form.Resim" class="btn-block">
+                                            <img src="@Model.Form.Resim" width="100" height="100" />
+                                        </a>
+                                    }
+                                    @Html.TextBoxFor(x => x.Form.Resim, "file", new { @class = "form-control", type = "file", accept = ".png,.jpg,.jpeg" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    @Html.HiddenFor(x => x.Form.Id)
+                                    <button type="submit" class="btn btn-block btn-warning" id="BtnKaydet">@Html.Raw(btnAdi)</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  // Arama kutusu
+  var input = document.getElementById("search");
+
+  // Tablo
+  var table = document.getElementById("myTable");
+
+  // Her değişiklikte arama yapmak için
+  input.addEventListener("keyup", function() {
+    // Arama terimini al
+    var search_term = input.value.toUpperCase();
+
+    // Tablodaki tüm satırları al
+    var rows = table.getElementsByTagName("tr");
+
+    // Her satır için arama yap
+      for (var i = 0; i < rows.length; i++) {
+          var cells = rows[i].getElementsByTagName("td"); // Tüm hücreleri al
+          var name = cells[0]; // İlk sütun Ad sütunu
+
+          // Eğer aranan ad ile eşleşiyorsa, satırı göster
+          if (name && name.innerHTML.toUpperCase().indexOf(search_term) > -1) {
+              rows[i].style.display = "";
+          } else {
+              rows[i].style.display = "none";
+          }
+      }
+  });
+</script>

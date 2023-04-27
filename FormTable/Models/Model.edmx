@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FormTableDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DersDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DersAdi" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OlusturulmaTarihi" Type="datetime" Nullable="false" />
+          <Property Name="OlusturanKisiID" Type="uniqueidentifier" />
+          <Property Name="GuncellenmeTarihi" Type="datetime" />
+          <Property Name="GuncelleyenKisiID" Type="uniqueidentifier" />
+          <Property Name="SilinmeTarihi" Type="datetime" />
+          <Property Name="SilenKisiID" Type="uniqueidentifier" />
+          <Property Name="AktifMi" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FormDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SinifNoID" Type="int" Nullable="false" />
+          <Property Name="DersID" Type="int" Nullable="false" />
+          <Property Name="Ad" Type="nvarchar" MaxLength="50" />
+          <Property Name="SoyAd" Type="nvarchar" MaxLength="50" />
+          <Property Name="SinifNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="DersAdi" Type="nvarchar" MaxLength="50" />
+          <Property Name="Konu" Type="nvarchar" MaxLength="150" />
+          <Property Name="Mesaj" Type="nvarchar(max)" />
+          <Property Name="Resim" Type="nvarchar(max)" />
+          <Property Name="OlusturulmaTarihi" Type="datetime" Nullable="false" />
+          <Property Name="OlusturanKisiID" Type="uniqueidentifier" />
+          <Property Name="GuncellenmeTarihi" Type="datetime" />
+          <Property Name="GuncelleyenKisiID" Type="uniqueidentifier" />
+          <Property Name="SilinmeTarihi" Type="datetime" />
+          <Property Name="SilenKisiID" Type="uniqueidentifier" />
+          <Property Name="AktifMi" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IzinsizGirisDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GirenKisi" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="GirmeTarihi" Type="datetime" Nullable="false" />
+          <Property Name="GirdigiSayfa" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KullanicilarDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AdSoyad" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" />
+          <Property Name="KullaniciAdi" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Sifre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Resim" Type="nvarchar(max)" />
+          <Property Name="OlusturulmaTarihi" Type="datetime" Nullable="false" />
+          <Property Name="OlusturanKisiID" Type="uniqueidentifier" />
+          <Property Name="GuncellenmeTarihi" Type="datetime" />
+          <Property Name="GuncelleyenKisiID" Type="uniqueidentifier" />
+          <Property Name="SilinmeTarihi" Type="datetime" />
+          <Property Name="SilenKisiID" Type="uniqueidentifier" />
+          <Property Name="AktifMi" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SinifNoDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SinifNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OlusturulmaTarihi" Type="datetime" Nullable="false" />
+          <Property Name="OlusturanKisiID" Type="uniqueidentifier" />
+          <Property Name="GuncellenmeTarihi" Type="datetime" />
+          <Property Name="GuncelleyenKisiID" Type="uniqueidentifier" />
+          <Property Name="SilinmeTarihi" Type="datetime" />
+          <Property Name="SilenKisiID" Type="uniqueidentifier" />
+          <Property Name="AktifMi" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_FormDT_DersDT">
+          <End Role="DersDT" Type="Self.DersDT" Multiplicity="1" />
+          <End Role="FormDT" Type="Self.FormDT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DersDT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FormDT">
+              <PropertyRef Name="DersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FormDT_SinifNoDT">
+          <End Role="SinifNoDT" Type="Self.SinifNoDT" Multiplicity="1" />
+          <End Role="FormDT" Type="Self.FormDT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SinifNoDT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FormDT">
+              <PropertyRef Name="SinifNoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FormTableDBModelStoreContainer">
+          <EntitySet Name="DersDT" EntityType="Self.DersDT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FormDT" EntityType="Self.FormDT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IzinsizGirisDT" EntityType="Self.IzinsizGirisDT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KullanicilarDT" EntityType="Self.KullanicilarDT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SinifNoDT" EntityType="Self.SinifNoDT" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_FormDT_DersDT" Association="Self.FK_FormDT_DersDT">
+            <End Role="DersDT" EntitySet="DersDT" />
+            <End Role="FormDT" EntitySet="FormDT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FormDT_SinifNoDT" Association="Self.FK_FormDT_SinifNoDT">
+            <End Role="SinifNoDT" EntitySet="SinifNoDT" />
+            <End Role="FormDT" EntitySet="FormDT" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FormTableDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="IzinsizGirisDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GirenKisi" Type="Guid" Nullable="false" />
+          <Property Name="GirmeTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="GirdigiSayfa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="FormTableDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="IzinsizGirisDTs" EntityType="Self.IzinsizGirisDT" />
+          <EntitySet Name="KullanicilarDTs" EntityType="FormTableDBModel.KullanicilarDT" />
+          <EntitySet Name="DersDTs" EntityType="FormTableDBModel.DersDT" />
+          <EntitySet Name="FormDTs" EntityType="FormTableDBModel.FormDT" />
+          <EntitySet Name="SinifNoDTs" EntityType="FormTableDBModel.SinifNoDT" />
+          <AssociationSet Name="FK_FormDT_DersDT" Association="FormTableDBModel.FK_FormDT_DersDT">
+            <End Role="DersDT" EntitySet="DersDTs" />
+            <End Role="FormDT" EntitySet="FormDTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FormDT_SinifNoDT" Association="FormTableDBModel.FK_FormDT_SinifNoDT">
+            <End Role="SinifNoDT" EntitySet="SinifNoDTs" />
+            <End Role="FormDT" EntitySet="FormDTs" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="KullanicilarDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="AdSoyad" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="KullaniciAdi" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Sifre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Resim" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OlusturulmaTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OlusturanKisiID" Type="Guid" />
+          <Property Name="GuncellenmeTarihi" Type="DateTime" Precision="3" />
+          <Property Name="GuncelleyenKisiID" Type="Guid" />
+          <Property Name="SilinmeTarihi" Type="DateTime" Precision="3" />
+          <Property Name="SilenKisiID" Type="Guid" />
+          <Property Name="AktifMi" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DersDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DersAdi" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OlusturulmaTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OlusturanKisiID" Type="Guid" />
+          <Property Name="GuncellenmeTarihi" Type="DateTime" Precision="3" />
+          <Property Name="GuncelleyenKisiID" Type="Guid" />
+          <Property Name="SilinmeTarihi" Type="DateTime" Precision="3" />
+          <Property Name="SilenKisiID" Type="Guid" />
+          <Property Name="AktifMi" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="FormDTs" Relationship="FormTableDBModel.FK_FormDT_DersDT" FromRole="DersDT" ToRole="FormDT" />
+        </EntityType>
+        <EntityType Name="FormDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SinifNoID" Type="Int32" Nullable="false" />
+          <Property Name="DersID" Type="Int32" Nullable="false" />
+          <Property Name="Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SoyAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SinifNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DersAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Konu" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Mesaj" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Resim" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OlusturulmaTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OlusturanKisiID" Type="Guid" />
+          <Property Name="GuncellenmeTarihi" Type="DateTime" Precision="3" />
+          <Property Name="GuncelleyenKisiID" Type="Guid" />
+          <Property Name="SilinmeTarihi" Type="DateTime" Precision="3" />
+          <Property Name="SilenKisiID" Type="Guid" />
+          <Property Name="AktifMi" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="DersDT" Relationship="FormTableDBModel.FK_FormDT_DersDT" FromRole="FormDT" ToRole="DersDT" />
+          <NavigationProperty Name="SinifNoDT" Relationship="FormTableDBModel.FK_FormDT_SinifNoDT" FromRole="FormDT" ToRole="SinifNoDT" />
+        </EntityType>
+        <EntityType Name="SinifNoDT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SinifNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OlusturulmaTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OlusturanKisiID" Type="Guid" />
+          <Property Name="GuncellenmeTarihi" Type="DateTime" Precision="3" />
+          <Property Name="GuncelleyenKisiID" Type="Guid" />
+          <Property Name="SilinmeTarihi" Type="DateTime" Precision="3" />
+          <Property Name="SilenKisiID" Type="Guid" />
+          <Property Name="AktifMi" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="FormDTs" Relationship="FormTableDBModel.FK_FormDT_SinifNoDT" FromRole="SinifNoDT" ToRole="FormDT" />
+        </EntityType>
+        <Association Name="FK_FormDT_DersDT">
+          <End Type="FormTableDBModel.DersDT" Role="DersDT" Multiplicity="1" />
+          <End Type="FormTableDBModel.FormDT" Role="FormDT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DersDT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FormDT">
+              <PropertyRef Name="DersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FormDT_SinifNoDT">
+          <End Type="FormTableDBModel.SinifNoDT" Role="SinifNoDT" Multiplicity="1" />
+          <End Type="FormTableDBModel.FormDT" Role="FormDT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SinifNoDT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FormDT">
+              <PropertyRef Name="SinifNoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FormTableDBModelStoreContainer" CdmEntityContainer="FormTableDBEntities">
+          <EntitySetMapping Name="IzinsizGirisDTs">
+            <EntityTypeMapping TypeName="FormTableDBModel.IzinsizGirisDT">
+              <MappingFragment StoreEntitySet="IzinsizGirisDT">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GirenKisi" ColumnName="GirenKisi" />
+                <ScalarProperty Name="GirmeTarihi" ColumnName="GirmeTarihi" />
+                <ScalarProperty Name="GirdigiSayfa" ColumnName="GirdigiSayfa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KullanicilarDTs">
+            <EntityTypeMapping TypeName="FormTableDBModel.KullanicilarDT">
+              <MappingFragment StoreEntitySet="KullanicilarDT">
+                <ScalarProperty Name="AktifMi" ColumnName="AktifMi" />
+                <ScalarProperty Name="SilenKisiID" ColumnName="SilenKisiID" />
+                <ScalarProperty Name="SilinmeTarihi" ColumnName="SilinmeTarihi" />
+                <ScalarProperty Name="GuncelleyenKisiID" ColumnName="GuncelleyenKisiID" />
+                <ScalarProperty Name="GuncellenmeTarihi" ColumnName="GuncellenmeTarihi" />
+                <ScalarProperty Name="OlusturanKisiID" ColumnName="OlusturanKisiID" />
+                <ScalarProperty Name="OlusturulmaTarihi" ColumnName="OlusturulmaTarihi" />
+                <ScalarProperty Name="Resim" ColumnName="Resim" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+                <ScalarProperty Name="KullaniciAdi" ColumnName="KullaniciAdi" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DersDTs">
+            <EntityTypeMapping TypeName="FormTableDBModel.DersDT">
+              <MappingFragment StoreEntitySet="DersDT">
+                <ScalarProperty Name="AktifMi" ColumnName="AktifMi" />
+                <ScalarProperty Name="SilenKisiID" ColumnName="SilenKisiID" />
+                <ScalarProperty Name="SilinmeTarihi" ColumnName="SilinmeTarihi" />
+                <ScalarProperty Name="GuncelleyenKisiID" ColumnName="GuncelleyenKisiID" />
+                <ScalarProperty Name="GuncellenmeTarihi" ColumnName="GuncellenmeTarihi" />
+                <ScalarProperty Name="OlusturanKisiID" ColumnName="OlusturanKisiID" />
+                <ScalarProperty Name="OlusturulmaTarihi" ColumnName="OlusturulmaTarihi" />
+                <ScalarProperty Name="DersAdi" ColumnName="DersAdi" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FormDTs">
+            <EntityTypeMapping TypeName="FormTableDBModel.FormDT">
+              <MappingFragment StoreEntitySet="FormDT">
+                <ScalarProperty Name="AktifMi" ColumnName="AktifMi" />
+                <ScalarProperty Name="SilenKisiID" ColumnName="SilenKisiID" />
+                <ScalarProperty Name="SilinmeTarihi" ColumnName="SilinmeTarihi" />
+                <ScalarProperty Name="GuncelleyenKisiID" ColumnName="GuncelleyenKisiID" />
+                <ScalarProperty Name="GuncellenmeTarihi" ColumnName="GuncellenmeTarihi" />
+                <ScalarProperty Name="OlusturanKisiID" ColumnName="OlusturanKisiID" />
+                <ScalarProperty Name="OlusturulmaTarihi" ColumnName="OlusturulmaTarihi" />
+                <ScalarProperty Name="Resim" ColumnName="Resim" />
+                <ScalarProperty Name="Mesaj" ColumnName="Mesaj" />
+                <ScalarProperty Name="Konu" ColumnName="Konu" />
+                <ScalarProperty Name="DersAdi" ColumnName="DersAdi" />
+                <ScalarProperty Name="SinifNo" ColumnName="SinifNo" />
+                <ScalarProperty Name="SoyAd" ColumnName="SoyAd" />
+                <ScalarProperty Name="Ad" ColumnName="Ad" />
+                <ScalarProperty Name="DersID" ColumnName="DersID" />
+                <ScalarProperty Name="SinifNoID" ColumnName="SinifNoID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SinifNoDTs">
+            <EntityTypeMapping TypeName="FormTableDBModel.SinifNoDT">
+              <MappingFragment StoreEntitySet="SinifNoDT">
+                <ScalarProperty Name="AktifMi" ColumnName="AktifMi" />
+                <ScalarProperty Name="SilenKisiID" ColumnName="SilenKisiID" />
+                <ScalarProperty Name="SilinmeTarihi" ColumnName="SilinmeTarihi" />
+                <ScalarProperty Name="GuncelleyenKisiID" ColumnName="GuncelleyenKisiID" />
+                <ScalarProperty Name="GuncellenmeTarihi" ColumnName="GuncellenmeTarihi" />
+                <ScalarProperty Name="OlusturanKisiID" ColumnName="OlusturanKisiID" />
+                <ScalarProperty Name="OlusturulmaTarihi" ColumnName="OlusturulmaTarihi" />
+                <ScalarProperty Name="SinifNo" ColumnName="SinifNo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,90 @@
+﻿@model FormTable.Areas.Yonetim.ViewModels.YeniKullaniciViewModel
+@{
+    ViewBag.Title = "Tanimla";
+    Layout = "~/Areas/Yonetim/Views/Shared/_YonetimLayout.cshtml";
+    var btnAdi = Model.KullaniciBilgileri.Id == Guid.Empty || Model.KullaniciBilgileri.Id == null ? "Kaydet" : "Düzenle";
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Kullanıcı İşlemleri</h5>
+                <div class="card-header-right">
+                    <div class="btn-group card-option">
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="feather icon-more-horizontal"></i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                @using (Html.BeginForm("EkleDuzenle", "Kullanici", FormMethod.Post, new { id = "FormKullaniciIslemleri", enctype = "multipart/form-data", @onsubmit = "ButonYukleniyor('BtnKaydet');" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-12">
+
+                        <div class="form-group row">
+                            @Html.LabelFor(x => x.KullaniciBilgileri.AdSoyad, "Ad Soyad", new { @class = "col-sm-4 col-form-label" })
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(x => x.KullaniciBilgileri.AdSoyad, new { @class = "form-control form-control-sm", required = true })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            @Html.LabelFor(x => x.KullaniciBilgileri.Email, "Email", new { @class = "col-sm-4 col-form-label" })
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(x => x.KullaniciBilgileri.Email, new { @class = "form-control form-control-sm", required = true })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(x => x.KullaniciBilgileri.KullaniciAdi, "Kulanıcı Adı", new { @class = "col-sm-4 col-form-label" })
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(x => x.KullaniciBilgileri.KullaniciAdi, new { @class = "form-control form-control-sm", required = true })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(x => x.KullaniciBilgileri.Sifre, "Şifre", new { @class = "col-sm-4 col-form-label" })
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(x => x.KullaniciBilgileri.Sifre, new { @class = "form-control form-control-sm", type = "password" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(x => x.KullaniciBilgileri.Resim, "Profil Resmi", new { @class = "col-sm-4 col-form-label" })
+                            <div class="col-sm-8">
+                                @if (Model.KullaniciBilgileri.Resim != null)
+                                {
+                                    <a href="@Model.KullaniciBilgileri.Resim" class="btn-block" data-fancybox data-caption="@Model.KullaniciBilgileri.AdSoyad" title="@Model.KullaniciBilgileri.AdSoyad">
+                                        <img src="@Model.KullaniciBilgileri.Resim" alt="@Model.KullaniciBilgileri.AdSoyad" width="100" height="100" />
+                                    </a>
+                                }
+                                @Html.TextBoxFor(x => x.KullaniciBilgileri.Resim, "file", new { @class = "form-control form-control-sm", type = "file", accept = ".png,.jpg,.jpeg" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                @Html.HiddenFor(x => x.KullaniciBilgileri.Id)
+                                <button type="submit" class="btn btn-block btn-out-dashed btn-danger" id="BtnKaydet">@btnAdi</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+@section _Css
+{
+    <link rel="stylesheet" type="text/css" href="~/Areas/Yonetim/assets/css/jquery.fancybox.min.css" />
+}
+@section _JavaScript
+{
+    <script type="text/javascript" src="~/Areas/Yonetim/assets/js/jquery.fancybox.min.js"></script>
+}
+
+
+
+
